@@ -10,7 +10,7 @@ namespace LearningCenter.Business
     public interface IClassManager
     {
         ClassModel[] Classes { get; }
-        // ClassModel[] myClasses(int userId);
+        ClassModel[] StudentClasses(int userId);
         ClassModel Class(int classId);
         //ClassModel[] addClass(int classId, int userId);
 
@@ -55,11 +55,11 @@ namespace LearningCenter.Business
             return new ClassModel(classModel.Id, classModel.Name, classModel.Description, classModel.Price);
         }
 
-        //public ClassModel[] myClasses(int userId)
-        //{
-        //    return classRepository.myClasses(userId).Select(t => new ClassModel(
-        //        t.Id, t.Name, t.Description, t.Price)).ToArray();
-        //}
+        public ClassModel[] StudentClasses(int userId)
+        {
+            return classRepository.StudentClasses(userId).Select(t => new ClassModel(
+                t.Id, t.Name, t.Description, t.Price)).ToArray();
+        }
 
         //public ClassModel[] addClass(int classId, int userId)
         //{

@@ -56,7 +56,7 @@ namespace LearningCenter.WebSite.Controllers
 
                 if (user == null)
                 {
-                    ModelState.AddModelError("", "User name and password do not match.");
+                    ModelState.AddModelError("", "Email and password do not match.");
                 }
                 else
                 {
@@ -70,12 +70,44 @@ namespace LearningCenter.WebSite.Controllers
 
             return View(loginModel);
         }
-
-        public ActionResult Register()
+        public ActionResult LogOff()
         {
-            ViewBag.Message = "Your Register page.";
+            Session["User"] = null;
+            System.Web.Security.FormsAuthentication.SignOut();
+
+            return Redirect("~/");
+        }
+
+        [HttpGet]
+        public ActionResult Register(string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
 
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult Register(RegisterModel registerModel, string returnUrl)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = userManager.Register(registerModel.Email, registerModel.Password);
+
+                if (user == null)
+                {
+                    ModelState.AddModelError("", "User name and password do not match.");
+                }
+                else
+                {
+                    Session["User"] = new Models.UserModel(user.Id, user.Email);
+
+                    System.Web.Security.FormsAuthentication.SetAuthCookie(registerModel.Email, false);
+
+                    return Redirect(returnUrl ?? "~/");
+                }
+            }
+
+            return View(registerModel);
         }
 
         public ActionResult ClassList()
