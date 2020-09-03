@@ -115,10 +115,62 @@ namespace LearningCenter.WebSite.Controllers
             ViewBag.Message = "Class Listing.";
 
             var classes = classManager.Classes
-                .Select(t => new Models.ClassModel(t.Id, t.Name, t.Description, t.Price))
+                .Select(c => new Models.ClassModel(c.Id, c.Name, c.Description, c.Price))
                 .ToArray();
 
             return View(classes);
+        }
+        
+        [Authorize]
+        public ActionResult StudentClasses()
+        {
+            ViewBag.Message = "Student Class Listing.";
+
+            var user = (Models.UserModel)Session["User"];
+
+            var classes = classManager.StudentClasses(user.Id)
+                .Select(c => new Models.ClassModel(c.Id, c.Name, c.Description, c.Price))
+                .ToArray();
+
+            return View(classes);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult EnrollInClass()
+        {
+            ViewBag.Message = "Classes Available to Enroll In";
+
+            var user = (Models.UserModel)Session["User"];
+
+            var classes = classManager.Classes
+                 .Select(c => new Models.ClassModel(c.Id, c.Name, c.Description, c.Price))
+                 .ToList();
+
+            var studentClasses = classManager.StudentClasses(user.Id)
+                .Select(c => new Models.ClassModel(c.Id, c.Name, c.Description, c.Price))
+                .ToArray();
+
+            classes.RemoveAll(c => studentClasses.Any(s => s.Name == c.Name));
+            
+            var openClasses = classes.ToArray();
+
+            var enrollInClassModel = new EnrollInClassModel { Classes = openClasses, ClassId = 0 };
+
+            return View(enrollInClassModel);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult EnrollInClass(EnrollInClassModel enrollInClassModel)
+        {
+            ViewBag.Message = "Classes Available to Enroll In";
+
+            var user = (Models.UserModel)Session["User"];
+
+            classManager.AddClass(enrollInClassModel.ClassId, user.Id);
+
+            return Redirect("~/Home/StudentClasses");
         }
     }
 }

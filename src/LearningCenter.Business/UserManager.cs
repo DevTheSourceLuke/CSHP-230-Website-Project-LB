@@ -17,13 +17,11 @@ namespace LearningCenter.Business
     {
         public int Id { get; set; }
         public string Email { get; set; }
-        //public string Password { get; set; }
 
-        public UserModel(int id, string email)//, string password)
+        public UserModel(int id, string email)
         {
             Id = id;
             Email = email;
-            //Password = password;
         }
     }
 

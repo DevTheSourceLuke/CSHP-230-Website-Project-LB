@@ -1,0 +1,32 @@
+﻿@model IEnumerable<LearningCenter.WebSite.Models.ClassModel>
+
+@{
+    ViewBag.Title = "Student Classes";
+}
+
+<h2>Classes</h2>
+
+<div>
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th>Class Name</th>
+                <th>Description</th>
+                <th>Paid</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var c in Model)
+            {
+                <tr>
+                    <td>@c.Name</td>
+                    <td>@c.Description</td>
+                    <td>@String.Format("{0:C}", c.Price)</td>
+                </tr>
+
+            }
+        </tbody>
+
+    </table>
+</div>
+

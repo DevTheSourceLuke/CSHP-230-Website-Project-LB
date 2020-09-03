@@ -25,8 +25,7 @@ namespace LearningCenter.Repository
         public UserModel LogIn(string email, string password)
         {
             var user = DatabaseAccessor.Instance.User
-                .FirstOrDefault(t => t.UserEmail.ToLower() == email.ToLower()
-                                      && t.UserPassword == password);
+                .FirstOrDefault(u => u.UserEmail.ToLower() == email.ToLower() && u.UserPassword == password);
 
             if (user == null)
             {

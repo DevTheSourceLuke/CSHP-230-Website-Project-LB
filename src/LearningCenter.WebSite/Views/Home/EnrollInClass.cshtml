@@ -1,0 +1,15 @@
+﻿@model LearningCenter.WebSite.Models.EnrollInClassModel
+
+@{
+    ViewBag.Title = "Enroll In Class";
+}
+
+<h2>Select a class you are currently not enrolled in:</h2>
+@using (Html.BeginForm())
+{
+    
+    @Html.DropDownListFor(c => c.ClassId, new SelectList(Model.Classes, "Id", "Name", Model.ClassId), "Select Classes Available");
+
+    <input type="submit" value="Add Class" />
+}
+

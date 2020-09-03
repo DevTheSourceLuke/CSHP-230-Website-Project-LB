@@ -9,11 +9,10 @@ namespace LearningCenter.Business
 {
     public interface IClassManager
     {
+        ClassModel Class(int classId);
         ClassModel[] Classes { get; }
         ClassModel[] StudentClasses(int userId);
-        ClassModel Class(int classId);
-        //ClassModel[] addClass(int classId, int userId);
-
+        ClassModel[] AddClass(int classId, int userId);
     }
 
     public class ClassModel
@@ -40,33 +39,33 @@ namespace LearningCenter.Business
         {
             this.classRepository = classRepository;
         }
-        public ClassModel[] Classes
-        {
-            get
-            {
-                return classRepository.Classes.Select(t => new ClassModel(
-                    t.Id, t.Name, t.Description, t.Price)).ToArray();
-            }
-        }
-
         public ClassModel Class(int classId)
         {
             var classModel = classRepository.GetClass(classId);
             return new ClassModel(classModel.Id, classModel.Name, classModel.Description, classModel.Price);
         }
+        public ClassModel[] Classes
+        {
+            get
+            {
+                return classRepository.Classes
+                    .Select(c => new ClassModel(c.Id, c.Name, c.Description, c.Price))
+                    .ToArray();
+            }
+        }
 
         public ClassModel[] StudentClasses(int userId)
         {
-            return classRepository.StudentClasses(userId).Select(t => new ClassModel(
-                t.Id, t.Name, t.Description, t.Price)).ToArray();
+            return classRepository.StudentClasses(userId)
+                .Select(c => new ClassModel(c.Id, c.Name, c.Description, c.Price))
+                .ToArray();
         }
 
-        //public ClassModel[] addClass(int classId, int userId)
-        //{
-        //    return classRepository.addClass(classId, userId).Select(t => new ClassModel(
-        //        t.Id, t.Name, t.Description, t.Price)).ToArray(); ;
-        //}
-
+        public ClassModel[] AddClass(int classId, int userId)
+        {
+            return classRepository.AddClass(classId, userId)
+                .Select(c => new ClassModel(c.Id, c.Name, c.Description, c.Price))
+                .ToArray(); 
+        }
     }
-
 }
